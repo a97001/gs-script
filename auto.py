@@ -139,7 +139,7 @@ def checkIsBattle(img):
         if isBattle is not True:
             print('In battle')
             isBattle = True
-            time.sleep(1.5)
+            time.sleep(3)
             px, py = checkBattleStartingPos(screenCap())
             initBattle(px, py)
 
@@ -177,5 +177,8 @@ def main():
     if isBattle == False and nextSelectMonsterTime < datetime.datetime.now():
         boxes, scores, classes, num = monsterDetector.get_classification(np.flip(img[:, :, :3], 2))
         selectMonster(boxes[0][0], scores[0][0])
+
+initImg = screenCap()
+monsterDetector.get_classification(np.flip(initImg[:, :, :3], 2))
 
 t = set_interval(main, 0.5)

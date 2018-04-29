@@ -91,6 +91,10 @@ void initBattle(String serialString)
   keyPress('g');
   delay(100);
   mouseClick(MOUSE_LEFT);
+  delay(500);
+  keyPress('7');
+  delay(100);
+  mouseClick(MOUSE_RIGHT);
   mouseMove(serialString, true);
 }
 
