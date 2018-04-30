@@ -73,7 +73,7 @@ void initBattle(String serialString)
   keyPress('g');
   delay(100);
   mouseClick(MOUSE_LEFT);
-  delay(1000);
+  delay(2000);
   keyPress('4');
   delay(100);
   keyPress('r');

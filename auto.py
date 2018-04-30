@@ -139,7 +139,7 @@ def checkIsBattle(img):
         if isBattle is not True:
             print('In battle')
             isBattle = True
-            time.sleep(3)
+            time.sleep(2.5)
             px, py = checkBattleStartingPos(screenCap())
             initBattle(px, py)
 
