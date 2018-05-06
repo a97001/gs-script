@@ -1,13 +1,14 @@
 import datetime
 import numpy as np
 import mss
+import random
 import serial
 import threading
 import time
 
 from MonsterDetector import MonsterDetector
 
-global monsterDetector, screenTop, screenLeft, usb, isBattle, nextSelectMonsterTime
+global monsterDetector, screenTop, screenLeft, usb, isBattle, nextSelectMonsterTime, pauseTime, pauseTimeEnd
 screenTop = 227
 screenLeft = 448
 isBattle = False
@@ -23,6 +24,8 @@ bottomPixel = [125, 745]
 leftMiddlePixel = [94, 731]
 rightMiddlePixel = [154, 701]
 
+pauseTime = datetime.datetime.now() + datetime.timedelta(seconds=46*60)
+pauseTimeEnd = datetime.datetime.now() + datetime.timedelta(seconds=61*60)
 
 monsterDetector = MonsterDetector()
 nextSelectMonsterTime = datetime.datetime.now()
@@ -56,12 +59,6 @@ def screenCap():
 
 def checkBattleStartingPos(img):
     global leftPixel, rightPixel, topPixel, bottomPixel, leftMiddlePixel, rightMiddlePixel
-    print(img[leftPixel[1]][leftPixel[0]])
-    print(img[rightPixel[1]][rightPixel[0]])
-    print(img[topPixel[1]][topPixel[0]])
-    print(img[bottomPixel[1]][bottomPixel[0]])
-    print(img[leftMiddlePixel[1]][leftMiddlePixel[0]])
-    print(img[rightMiddlePixel[1]][rightMiddlePixel[0]])
     if img[leftPixel[1]][leftPixel[0]][0] == 156 and img[leftPixel[1]][leftPixel[0]][1] == 0 and img[leftPixel[1]][leftPixel[0]][2] == 0:
         print('left side')
         return 960, 405
@@ -80,45 +77,6 @@ def checkBattleStartingPos(img):
     if img[rightMiddlePixel[1]][rightMiddlePixel[0]][0] == 156 and img[rightMiddlePixel[1]][rightMiddlePixel[0]][1] == 0 and img[rightMiddlePixel[1]][rightMiddlePixel[0]][2] == 0:
         print('right middle side')
         return 80, 590
-    # global topLeftPixels, topRightPixels, bottomLeftPixels, bottomRightPixels
-    # isTopLeftBlk = True
-    # isTopRightBlk = True
-    # isBottomLeftBlk = True
-    # isBottomRightBlk = True
-    # for pixel in topLeftPixels:
-    #     if img[pixel[1]][pixel[0]][0] != 0 or img[pixel[1]][pixel[0]][1] != 0 or img[pixel[1]][pixel[0]][2] != 0:
-    #         isTopLeftBlk = False
-    #         break
-    # for pixel in topRightPixels:
-    #     if img[pixel[1]][pixel[0]][0] != 0 or img[pixel[1]][pixel[0]][1] != 0 or img[pixel[1]][pixel[0]][2] != 0:
-    #         isTopRightBlk = False
-    #         break
-    # for pixel in bottomLeftPixels:
-    #     if img[pixel[1]][pixel[0]][0] != 0 or img[pixel[1]][pixel[0]][1] != 0 or img[pixel[1]][pixel[0]][2] != 0:
-    #         isBottomLeftBlk = False
-    #         break
-    # for pixel in bottomRightPixels:
-    #     if img[pixel[1]][pixel[0]][0] != 0 or img[pixel[1]][pixel[0]][1] != 0 or img[pixel[1]][pixel[0]][2] != 0:
-    #         isBottomRightBlk = False
-    #         break
-    # if isTopLeftBlk and isBottomLeftBlk:
-    #     print('isTopLeftBlk isBottomLeftBlk')
-    #     return 960, 405
-    # if isTopRightBlk and isBottomRightBlk:
-    #     print('isTopRightBlk isBottomRightBlk')
-    #     return 40, 405
-    # if isTopLeftBlk and isTopRightBlk:
-    #     print('isTopLeftBlk isTopRightBlk')
-    #     return 500, 600
-    # if isBottomLeftBlk and isBottomRightBlk:
-    #     print('isBottomLeftBlk isBottomRightBlk')
-    #     return 500, 85
-    # if isBottomLeftBlk:
-    #     print('isBottomLeftBlk')
-    #     return 900, 130
-    # if isTopRightBlk:
-    #     print('isTopRightBlk')
-    #     return 80, 590
     return int(1024/2), int(768/2)
 
 def checkStamina(img):
@@ -135,6 +93,8 @@ def checkIsBattle(img):
             print('Not in battle')
             isBattle = False
             checkStamina(img)
+            # time.sleep(random.randint(1,10))
+
     else:
         if isBattle is not True:
             print('In battle')
@@ -142,16 +102,17 @@ def checkIsBattle(img):
             time.sleep(2.5)
             px, py = checkBattleStartingPos(screenCap())
             initBattle(px, py)
+            print(datetime.datetime.now())
 
 def selectMonster(box, score):
     global nextSelectMonsterTime
-    print(score)
+    # print(score)
     if (score > 0.7):
         minY = box[0] * 768
         minX = box[1] * 1024
         maxY = box[2] * 768
         maxX = box[3] * 1024
-        print(int(minX + (maxX - minX) / 2), int(minY + (maxY - minY) / 2))
+        # print(int(minX + (maxX - minX) / 2), int(minY + (maxY - minY) / 2))
         mouseMoveClick('r', int(minX + (maxX - minX) / 2), int(minY + (maxY - minY) / 2))
         nextSelectMonsterTime = datetime.datetime.now() + datetime.timedelta(seconds=5)
 
@@ -164,7 +125,7 @@ def set_interval(func, sec):
     return t
 
 def main():
-    global isBattle, nextSelectMonsterTime
+    global isBattle, nextSelectMonsterTime, pauseTime, pauseTimeEnd
 
     img = screenCap()
     # boxes, scores, classes, num = monsterDetector.get_classification(np.flip(img[:, :, :3], 2))
@@ -175,6 +136,12 @@ def main():
     # print(img[31][979])
     checkIsBattle(img)
     if isBattle == False and nextSelectMonsterTime < datetime.datetime.now():
+        if pauseTimeEnd < datetime.datetime.now():
+            pauseTime = datetime.datetime.now() + datetime.timedelta(seconds=45*60)
+            pauseTimeEnd = datetime.datetime.now() + datetime.timedelta(seconds=60*60)
+        if pauseTime < datetime.datetime.now() and pauseTimeEnd > datetime.datetime.now():
+            return 0
+            
         boxes, scores, classes, num = monsterDetector.get_classification(np.flip(img[:, :, :3], 2))
         selectMonster(boxes[0][0], scores[0][0])
 
