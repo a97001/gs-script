@@ -8,7 +8,7 @@ import time
 
 from MonsterDetector import MonsterDetector
 
-global monsterDetector, screenTop, screenLeft, usb, isBattle, nextSelectMonsterTime, pauseTime, pauseTimeEnd
+global monsterDetector, screenTop, screenLeft, mapIconColor, battleColor, usb, isBattle, nextSelectMonsterTime, pauseTime, pauseTimeEnd
 screenTop = 227
 screenLeft = 448
 isBattle = False
@@ -16,6 +16,7 @@ topLeftPixels = [[80,20], [80, 70], [40, 90], [85, 100], [150, 105]]
 topRightPixels = [[890, 100], [800, 65], [830, 110], [875, 120], [775, 135]]
 bottomLeftPixels = [[50,625], [80, 620], [20, 625], [100, 630]]
 bottomRightPixels = [[940,630], [970,620], [975,600], [910,645]]
+battleColor = 148
 
 leftPixel = [67, 716]
 rightPixel = [181, 717]
@@ -58,23 +59,23 @@ def screenCap():
         return np.array(sct.grab(monitor), dtype=np.uint8)
 
 def checkBattleStartingPos(img):
-    global leftPixel, rightPixel, topPixel, bottomPixel, leftMiddlePixel, rightMiddlePixel
-    if img[leftPixel[1]][leftPixel[0]][0] == 156 and img[leftPixel[1]][leftPixel[0]][1] == 0 and img[leftPixel[1]][leftPixel[0]][2] == 0:
+    global leftPixel, rightPixel, topPixel, bottomPixel, leftMiddlePixel, rightMiddlePixel, battleColor
+    if img[leftPixel[1]][leftPixel[0]][0] == battleColor and img[leftPixel[1]][leftPixel[0]][1] == 0 and img[leftPixel[1]][leftPixel[0]][2] == 0:
         print('left side')
         return 960, 405
-    if img[rightPixel[1]][rightPixel[0]][0] == 156 and img[rightPixel[1]][rightPixel[0]][1] == 0 and img[rightPixel[1]][rightPixel[0]][2] == 0:
+    if img[rightPixel[1]][rightPixel[0]][0] == battleColor and img[rightPixel[1]][rightPixel[0]][1] == 0 and img[rightPixel[1]][rightPixel[0]][2] == 0:
         print('right side')
         return 40, 405
-    if img[topPixel[1]][topPixel[0]][0] == 156 and img[topPixel[1]][topPixel[0]][1] == 0 and img[topPixel[1]][topPixel[0]][2] == 0:
+    if img[topPixel[1]][topPixel[0]][0] == battleColor and img[topPixel[1]][topPixel[0]][1] == 0 and img[topPixel[1]][topPixel[0]][2] == 0:
         print('top side')
         return 500, 600
-    if img[bottomPixel[1]][bottomPixel[0]][0] == 156 and img[bottomPixel[1]][bottomPixel[0]][1] == 0 and img[bottomPixel[1]][bottomPixel[0]][2] == 0:
+    if img[bottomPixel[1]][bottomPixel[0]][0] == battleColor and img[bottomPixel[1]][bottomPixel[0]][1] == 0 and img[bottomPixel[1]][bottomPixel[0]][2] == 0:
         print('bottom side')
         return 500, 85
-    if img[leftMiddlePixel[1]][leftMiddlePixel[0]][0] == 156 and img[leftMiddlePixel[1]][leftMiddlePixel[0]][1] == 0 and img[leftMiddlePixel[1]][leftMiddlePixel[0]][2] == 0:
+    if img[leftMiddlePixel[1]][leftMiddlePixel[0]][0] == battleColor and img[leftMiddlePixel[1]][leftMiddlePixel[0]][1] == 0 and img[leftMiddlePixel[1]][leftMiddlePixel[0]][2] == 0:
         print('left middle side')
         return 900, 130
-    if img[rightMiddlePixel[1]][rightMiddlePixel[0]][0] == 156 and img[rightMiddlePixel[1]][rightMiddlePixel[0]][1] == 0 and img[rightMiddlePixel[1]][rightMiddlePixel[0]][2] == 0:
+    if img[rightMiddlePixel[1]][rightMiddlePixel[0]][0] == battleColor and img[rightMiddlePixel[1]][rightMiddlePixel[0]][1] == 0 and img[rightMiddlePixel[1]][rightMiddlePixel[0]][2] == 0:
         print('right middle side')
         return 80, 590
     return int(1024/2), int(768/2)
@@ -84,11 +85,11 @@ def checkStamina(img):
     y = 390 - int(768 / 2)
     if img[669][190][0] != 66 or img[669][190][1] != 211 or img[669][190][2] != 165 or img[676][190][0] != 66 or img[676][190][1] != 211 or img[676][190][2] != 165:
         usb.write(("s:s:"+str(x)+":"+str(y)+"\n").encode('utf-8'))
-        time.sleep(1.5)
+        time.sleep(1)
 
 def checkIsBattle(img):
-    global isBattle
-    if img[3][1004][1] == 199 and img[36][1004][1] == 199 and img[5][988][1] == 199 and img[31][979][1] == 199:
+    global isBattle, mapIconColor
+    if img[3][1004][1] == mapIconColor and img[36][1004][1] == mapIconColor and img[5][988][1] == mapIconColor and img[31][979][1] == mapIconColor:
         if isBattle is not False:
             print('Not in battle')
             isBattle = False
@@ -147,5 +148,6 @@ def main():
 
 initImg = screenCap()
 monsterDetector.get_classification(np.flip(initImg[:, :, :3], 2))
+mapIconColor = initImg[3][1004][1]
 
 t = set_interval(main, 0.5)
