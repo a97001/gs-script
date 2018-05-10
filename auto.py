@@ -8,7 +8,7 @@ import time
 
 from MonsterDetector import MonsterDetector
 
-global monsterDetector, screenTop, screenLeft, mapIconColor, battleColor, usb, isBattle, nextSelectMonsterTime, pauseTime, pauseTimeEnd
+global monsterDetector, screenTop, screenLeft, mapIconColor, battleColor, mouseRatio, usb, isBattle, nextSelectMonsterTime, pauseTime, pauseTimeEnd
 screenTop = 227
 screenLeft = 448
 isBattle = False
@@ -17,6 +17,7 @@ topRightPixels = [[890, 100], [800, 65], [830, 110], [875, 120], [775, 135]]
 bottomLeftPixels = [[50,625], [80, 620], [20, 625], [100, 630]]
 bottomRightPixels = [[940,630], [970,620], [975,600], [910,645]]
 battleColor = 148
+mouseRatio = 1
 
 leftPixel = [67, 716]
 rightPixel = [181, 717]
@@ -36,16 +37,18 @@ usb.port = "COM7"
 usb.open()
 
 def mouseMoveClick(button, x, y):
-    x = x - int(1024 / 2)
-    y = y - int(768 / 2)
+    global mouseRatio
+    x = int((x - 1024 / 2) * mouseRatio)
+    y = int((y - 768 / 2) * mouseRatio)
     usb.write(("m:"+button+":"+str(x)+":"+str(y)+"\n").encode('utf-8'))
 
 def keyPress(key):
     usb.write(("k:"+key+"\n").encode('utf-8'))
 
 def initBattle(x, y):
-    x = x - int(1024 / 2)
-    y = y - int(768 / 2)
+    global mouseRatio
+    x = int((x - 1024 / 2) * mouseRatio)
+    y = int((y - 768 / 2) * mouseRatio)
     time.sleep(0.1)
     usb.write(("b:b:"+str(x)+":"+str(y)+"\n").encode('utf-8'))
 
