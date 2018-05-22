@@ -59,7 +59,11 @@ void mouseClick(char bt)
 
 void keyPress(char key)
 {
-  Keyboard.press(key);
+  if (key == '*') {
+    Keyboard.press(KEY_RETURN);
+  } else {
+    Keyboard.press(key);
+  }
   delay(50);
   Keyboard.releaseAll();
 }
@@ -107,6 +111,8 @@ void eatFood(String serialString)
   delay(100);
   keyPress('i');
   mouseMove(serialString, false);
+  delay(100);
+  mouseClick(MOUSE_RIGHT);
   delay(100);
   mouseClick(MOUSE_RIGHT);
   delay(100);
