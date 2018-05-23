@@ -97,34 +97,39 @@ def imageORC(img):
     return s
 
 def checkAutoHunt():
-    img = screenCapRect(325, 380, 216, 64)
+    img = screenCapRect(324, 436, 167, 74)
     isAutoHuntReport = imageORC(img)
-    if 'Autohunt report' in isAutoHuntReport:
+    if 'report has been' in isAutoHuntReport:
         print('In auto hunt report')
-        mouseMoveClick('l', 630, 430)
-        time.sleep(1)
-        screenCap(True)
-        img = screenCapRect(208, 411, 612-411, 487-208)
-        autoHuntType = imageORC(img)
-        if 'Please type' in autoHuntType:
-            img = screenCapRect(350, 418, 188, 58)
-            engString = imageORC(img)
-            for c in engString:
-                keyPress(c)
-            keyPress('*')
+        return True
+    return False
 
-        elif 'your answer' in autoHuntType:
-            img = screenCapRect(350, 418, 188, 51)
-            mathString = imageORC(img)
-            mathString = mathString.replace('x', '*').replace('X', '*').replace('×', '*').replace('÷', '/').replace('_', '-')
-            ans = eval(mathString)
-            ANSBOXCOOR = [[451, 404, [440, 415]], [451, 425, [440, 435]], [501, 404, [490, 415]], [501, 425, [490, 435]], [551, 404, [540, 415]], [551, 425, [540, 435]]]
-            for ansBox in ANSBOXCOOR:
-                img = screenCapRect(ansBox[1], ansBox[0], 30, 19)
-                boxAns = imageORC(img)
-                if int(boxAns) == ans:
-                    mouseMoveClick('l', boxAns[2][0], boxAns[2][1])
-                    break
+def solveAutoHunt():
+    mouseMoveClick('l', 630, 430)
+    time.sleep(1)
+    screenCap(True)
+    img = screenCapRect(208, 411, 612-411, 487-208)
+    autoHuntType = imageORC(img)
+    if 'Please type' in autoHuntType:
+        img = screenCapRect(350, 418, 188, 58)
+        engString = imageORC(img)
+        for c in engString:
+            keyPress(c)
+            time.sleep(0.1)
+        keyPress('*')
+
+    elif 'your answer' in autoHuntType:
+        img = screenCapRect(350, 418, 188, 51)
+        mathString = imageORC(img)
+        mathString = mathString.replace('x', '*').replace('X', '*').replace('×', '*').replace('÷', '/').replace('_', '-')
+        ans = eval(mathString)
+        ANSBOXCOOR = [[451, 404, [440, 415]], [451, 425, [440, 435]], [501, 404, [490, 415]], [501, 425, [490, 435]], [551, 404, [540, 415]], [551, 425, [540, 435]]]
+        for ansBox in ANSBOXCOOR:
+            img = screenCapRect(ansBox[1], ansBox[0], 30, 19)
+            boxAns = imageORC(img)
+            if int(boxAns) == ans:
+                mouseMoveClick('l', boxAns[2][0], boxAns[2][1])
+                break
 
 
 def checkBattleStartingPos(img):
@@ -212,15 +217,16 @@ def main():
         #     pauseTimeEnd = datetime.datetime.now() + datetime.timedelta(seconds=60*60)
         # if pauseTime < datetime.datetime.now() and pauseTimeEnd > datetime.datetime.now():
         #     return 0
-            
-        boxes, scores, classes, num = monsterDetector.get_classification(np.flip(img[:, :, :3], 2))
-        selectMonster(boxes[0][0], scores[0][0])
-        checkAutoHunt()
+        if checkAutoHunt():
+            solveAutoHunt()
+        else:
+            boxes, scores, classes, num = monsterDetector.get_classification(np.flip(img[:, :, :3], 2))
+            selectMonster(boxes[0][0], scores[0][0])
 
 initImg = screenCap(False)
 monsterDetector.get_classification(np.flip(initImg[:, :, :3], 2))
 mapIconColor = initImg[3][1004][1]
 
 while True:
-    time.sleep(2)
+    # time.sleep(0.5)
     main()
