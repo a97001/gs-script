@@ -63,7 +63,7 @@ def screenCap(saveImg):
         # Grab the data
         if saveImg:
             im = sct.grab(monitor)
-            mss.tools.to_png(im.rgb, im.size, output='screenshot-'+datetime.datetime.now().strftime("%I:%M%p on %B %d, %Y")+'.png')
+            mss.tools.to_png(im.rgb, im.size, output="screenshot-"+str(int(time.time())) +".png")
             return np.array(im, dtype=np.uint8)
         return np.array(sct.grab(monitor), dtype=np.uint8)
 
@@ -99,7 +99,6 @@ def imageORC(img):
 def checkAutoHunt():
     img = screenCapRect(325, 380, 216, 64)
     isAutoHuntReport = imageORC(img)
-    screenCap(True)
     if 'Autohunt report' in isAutoHuntReport:
         print('In auto hunt report')
         mouseMoveClick('l', 630, 430)
