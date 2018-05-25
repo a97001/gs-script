@@ -93,8 +93,11 @@ def imageORC(img):
     ratio = float(width)/image.size[0]
     height = int(image.size[1]*ratio)
     image = image.resize( (width, height), Image.BILINEAR)
-    s = pytesseract.image_to_string(image, config=tessdata_dir_config)
-    return s
+    try:
+        s = pytesseract.image_to_string(image, config=tessdata_dir_config)
+        return s
+    except:
+        return ''
 
 def checkAutoHunt():
     img = screenCapRect(324, 436, 167, 74)
@@ -108,7 +111,7 @@ def solveAutoHunt():
     mouseMoveClick('l', 630, 430)
     time.sleep(1)
     screenCap(True)
-    img = screenCapRect(208, 411, 612-411, 487-208)
+    img = screenCapRect(280, 411, 202, 29)
     autoHuntType = imageORC(img)
     if 'Please type' in autoHuntType:
         img = screenCapRect(350, 418, 188, 58)
@@ -188,8 +191,11 @@ def selectMonster(box, score):
         maxY = box[2] * 768
         maxX = box[3] * 1024
         # print(int(minX + (maxX - minX) / 2), int(minY + (maxY - minY) / 2))
-        mouseMoveClick('r', int(minX + (maxX - minX) / 2), int(minY + (maxY - minY) / 2))
-        nextSelectMonsterTime = datetime.datetime.now() + datetime.timedelta(seconds=5)
+        monsterX = int(minX + (maxX - minX) / 2)
+        monsterY = int(minY + (maxY - minY) / 2)
+        if (monsterX <= 975):
+            mouseMoveClick('r', monsterX, monsterY)
+            nextSelectMonsterTime = datetime.datetime.now() + datetime.timedelta(seconds=5)
 
 def set_interval(func, sec):
     def func_wrapper():
