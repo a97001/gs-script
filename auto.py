@@ -116,6 +116,7 @@ def solveAutoHunt():
     if 'Please type' in autoHuntType:
         img = screenCapRect(350, 418, 188, 58)
         engString = imageORC(img)
+        engString = engString.replace(' ', '')
         for c in engString:
             keyPress(c)
             time.sleep(0.1)
