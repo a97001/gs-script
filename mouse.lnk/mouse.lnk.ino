@@ -132,13 +132,19 @@ void loop()
     serialString = Serial.readStringUntil('\n');
     if (serialString.charAt(0) == 'm') {
     // m:r:100:100
-      mouseMove(serialString, false);
       if (serialString.charAt(2) == 'r') {
+        mouseMove(serialString, false);
         mouseClick(MOUSE_RIGHT);
+        mouseMove(serialString, true);
       } else if (serialString.charAt(2) == 'l') {
+        mouseMove(serialString, false);
         mouseClick(MOUSE_LEFT);
+        mouseMove(serialString, true);
+      } else if (serialString.charAt(2) == 'f') {
+        mouseMove(serialString, false);
+      } else if (serialString.charAt(2) == 'b') {
+        mouseMove(serialString, true);
       }
-      mouseMove(serialString, true);
     } else if (serialString.charAt(0) == 'k') {
       keyPress(serialString.charAt(2));
     } else if (serialString.charAt(0) == 'b') {

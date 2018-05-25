@@ -44,6 +44,15 @@ def mouseMoveClick(button, x, y):
     y = int((y - 768 / 2) * mouseRatio)
     usb.write(("m:"+button+":"+str(x)+":"+str(y)+"\n").encode('utf-8'))
 
+def mouseMove(x, y, isBack):
+    global mouseRatio
+    x = int((x - 1024 / 2) * mouseRatio)
+    y = int((y - 768 / 2) * mouseRatio)
+    direction = 'f'
+    if (isBack):
+        direction = 'b'
+    usb.write(("m:"+direction+":"+str(x)+":"+str(y)+"\n").encode('utf-8'))
+
 def keyPress(key):
     usb.write(("k:"+key+"\n").encode('utf-8'))
 
@@ -111,6 +120,8 @@ def solveAutoHunt():
     mouseMoveClick('l', 630, 430)
     time.sleep(1)
     screenCap(True)
+    mouseMove(820, 390, False)
+    time.sleep(1)
     img = screenCapRect(280, 411, 202, 29)
     autoHuntType = imageORC(img)
     if 'Please type' in autoHuntType:
@@ -121,6 +132,7 @@ def solveAutoHunt():
             keyPress(c)
             time.sleep(0.1)
         keyPress('*')
+        mouseMove(820, 390, True)
 
     elif 'your answer' in autoHuntType:
         img = screenCapRect(350, 418, 188, 51)
@@ -132,8 +144,12 @@ def solveAutoHunt():
             img = screenCapRect(ansBox[1], ansBox[0], 30, 19)
             boxAns = imageORC(img)
             if int(boxAns) == ans:
+                mouseMove(820, 390, True)
+                time.sleep(1)
                 mouseMoveClick('l', boxAns[2][0], boxAns[2][1])
                 break
+
+    time.sleep(1)
 
 
 def checkBattleStartingPos(img):
