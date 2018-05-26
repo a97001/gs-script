@@ -112,7 +112,7 @@ def checkAutoHunt():
     img = screenCapRect(324, 436, 167, 74)
     isAutoHuntReport = imageORC(img)
     if 'report has been' in isAutoHuntReport:
-        print('In auto hunt report')
+        print('------------In auto hunt report--------------')
         return True
     return False
 
@@ -142,11 +142,11 @@ def solveAutoHunt():
         ANSBOXCOOR = [[451, 404, [440, 415]], [451, 425, [440, 435]], [501, 404, [490, 415]], [501, 425, [490, 435]], [551, 404, [540, 415]], [551, 425, [540, 435]]]
         for ansBox in ANSBOXCOOR:
             img = screenCapRect(ansBox[1], ansBox[0], 30, 19)
-            boxAns = imageORC(img)
-            if int(boxAns) == ans:
+            ansOfAnsBox = imageORC(img)
+            if int(ansOfAnsBox) == ans:
                 mouseMove(820, 390, True)
                 time.sleep(1)
-                mouseMoveClick('l', boxAns[2][0], boxAns[2][1])
+                mouseMoveClick('l', ansBox[2][0], ansBox[2][1])
                 break
 
     time.sleep(1)
