@@ -14,10 +14,10 @@ global monsterDetector, screenTop, screenLeft, mapIconColor, battleColor, mouseR
 screenTop = 227
 screenLeft = 448
 isBattle = False
-topLeftPixels = [[80,20], [80, 70], [40, 90], [85, 100], [150, 105]]
-topRightPixels = [[890, 100], [800, 65], [830, 110], [875, 120], [775, 135]]
-bottomLeftPixels = [[50,625], [80, 620], [20, 625], [100, 630]]
-bottomRightPixels = [[940,630], [970,620], [975,600], [910,645]]
+# topLeftPixels = [[80,20], [80, 70], [40, 90], [85, 100], [150, 105]]
+# topRightPixels = [[890, 100], [800, 65], [830, 110], [875, 120], [775, 135]]
+# bottomLeftPixels = [[50,625], [80, 620], [20, 625], [100, 630]]
+# bottomRightPixels = [[940,630], [970,620], [975,600], [910,645]]
 battleColor = 148
 mouseRatio = 1
 
@@ -118,7 +118,7 @@ def checkAutoHunt():
 
 def solveAutoHunt():
     time.sleep(1)
-    mouseMoveClick('l', 630, 430)
+    mouseMoveClick('l', 628, 428)
     time.sleep(1)
     screenCap(True)
     mouseMove(820, 390, False)
@@ -149,7 +149,8 @@ def solveAutoHunt():
                 time.sleep(1)
                 mouseMoveClick('l', ansBox[2][0], ansBox[2][1])
                 break
-
+    else:
+        mouseMove(820, 390, True)
     time.sleep(1)
 
 
@@ -160,7 +161,7 @@ def checkBattleStartingPos(img):
         return 960, 405
     if img[rightPixel[1]][rightPixel[0]][0] == battleColor and img[rightPixel[1]][rightPixel[0]][1] == 0 and img[rightPixel[1]][rightPixel[0]][2] == 0:
         print('right side')
-        return 40, 405
+        return 40, 340
     if img[topPixel[1]][topPixel[0]][0] == battleColor and img[topPixel[1]][topPixel[0]][1] == 0 and img[topPixel[1]][topPixel[0]][2] == 0:
         print('top side')
         return 500, 600
