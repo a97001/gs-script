@@ -14,10 +14,6 @@ global monsterDetector, screenTop, screenLeft, mapIconColor, battleColor, mouseR
 screenTop = 227
 screenLeft = 448
 isBattle = False
-# topLeftPixels = [[80,20], [80, 70], [40, 90], [85, 100], [150, 105]]
-# topRightPixels = [[890, 100], [800, 65], [830, 110], [875, 120], [775, 135]]
-# bottomLeftPixels = [[50,625], [80, 620], [20, 625], [100, 630]]
-# bottomRightPixels = [[940,630], [970,620], [975,600], [910,645]]
 battleColor = 148
 mouseRatio = 1
 
@@ -60,7 +56,7 @@ def initBattle(x, y):
     global mouseRatio
     x = int((x - 1024 / 2) * mouseRatio)
     y = int((y - 768 / 2) * mouseRatio)
-    time.sleep(0.1)
+    # time.sleep(0.1)
     usb.write(("b:b:"+str(x)+":"+str(y)+"\n").encode('utf-8'))
 
 def screenCap(saveImg):
@@ -181,22 +177,23 @@ def checkStamina(img):
     y = 390 - int(768 / 2)
     if img[669][190][0] != 66 or img[669][190][1] != 211 or img[669][190][2] != 165 or img[676][190][0] != 66 or img[676][190][1] != 211 or img[676][190][2] != 165:
         usb.write(("s:s:"+str(x)+":"+str(y)+"\n").encode('utf-8'))
-        time.sleep(1)
+        time.sleep(0.7)
 
 def checkIsBattle(img):
     global isBattle, mapIconColor
-    if img[3][1004][1] == mapIconColor and img[36][1004][1] == mapIconColor and img[5][988][1] == mapIconColor and img[31][979][1] == mapIconColor:
+    img = screenCapRect(708, 837, 55, 17)
+    checkedWord = imageORC(img)
+    if 'Battle' in checkedWord or 'Peace' in checkedWord:
         if isBattle is not False:
             print('Not in battle')
             isBattle = False
             checkStamina(img)
-            # time.sleep(random.randint(1,10))
 
     else:
         if isBattle is not True:
             print('In battle')
             isBattle = True
-            time.sleep(2.5)
+            time.sleep(2.3)
             px, py = checkBattleStartingPos(screenCap(False))
             initBattle(px, py)
             print(datetime.datetime.now())
@@ -204,7 +201,7 @@ def checkIsBattle(img):
 def selectMonster(box, score):
     global nextSelectMonsterTime
     # print(score)
-    if (score > 0.7):
+    if (score > 0.67):
         minY = box[0] * 768
         minX = box[1] * 1024
         maxY = box[2] * 768
@@ -212,9 +209,9 @@ def selectMonster(box, score):
         # print(int(minX + (maxX - minX) / 2), int(minY + (maxY - minY) / 2))
         monsterX = int(minX + (maxX - minX) / 2)
         monsterY = int(minY + (maxY - minY) / 2)
-        if (monsterX <= 975):
+        if (monsterX <= 975 and monsterY <= 750):
             mouseMoveClick('r', monsterX, monsterY)
-            nextSelectMonsterTime = datetime.datetime.now() + datetime.timedelta(seconds=5)
+            nextSelectMonsterTime = datetime.datetime.now() + datetime.timedelta(seconds=4)
 
 def set_interval(func, sec):
     def func_wrapper():

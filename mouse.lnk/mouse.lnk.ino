@@ -77,7 +77,17 @@ void initBattle(String serialString)
   keyPress('g');
   delay(100);
   mouseClick(MOUSE_LEFT);
-  delay(2000);
+  delay(500);
+  keyPress('6');
+  delay(100);
+  keyPress('g');
+  delay(100);
+  mouseClick(MOUSE_LEFT);
+  delay(500);
+  keyPress('7');
+  delay(100);
+  mouseClick(MOUSE_RIGHT);
+  delay(500);
   keyPress('4');
   delay(100);
   keyPress('r');
@@ -89,16 +99,7 @@ void initBattle(String serialString)
   keyPress('r');
   delay(100);
   mouseClick(MOUSE_LEFT);
-  delay(500);
-  keyPress('6');
   delay(100);
-  keyPress('g');
-  delay(100);
-  mouseClick(MOUSE_LEFT);
-  delay(500);
-  keyPress('7');
-  delay(100);
-  mouseClick(MOUSE_RIGHT);
   mouseMove(serialString, true);
 }
 
