@@ -181,8 +181,8 @@ def checkStamina(img):
 
 def checkIsBattle(img):
     global isBattle, mapIconColor
-    img = screenCapRect(708, 837, 55, 17)
-    checkedWord = imageORC(img)
+    orc = screenCapRect(708, 837, 55, 17)
+    checkedWord = imageORC(orc)
     if 'Battle' in checkedWord or 'Peace' in checkedWord:
         if isBattle is not False:
             print('Not in battle')
