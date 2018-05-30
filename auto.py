@@ -34,6 +34,9 @@ usb.baudrate = 9600
 usb.port = "COM7"
 usb.open()
 
+def parseInt(string):
+    return int(''.join([x for x in string if x.isdigit()]))
+
 def mouseMoveClick(button, x, y):
     global mouseRatio
     x = int((x - 1024 / 2) * mouseRatio)
@@ -140,7 +143,7 @@ def solveAutoHunt():
         for ansBox in ANSBOXCOOR:
             img = screenCapRect(ansBox[1], ansBox[0], 30, 19)
             ansOfAnsBox = imageORC(img)
-            if int(ansOfAnsBox) == ans:
+            if parseInt(ansOfAnsBox) == ans:
                 mouseMove(820, 390, True)
                 time.sleep(1)
                 mouseMoveClick('l', ansBox[2][0], ansBox[2][1])
