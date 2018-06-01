@@ -143,7 +143,11 @@ def solveAutoHunt():
         for ansBox in ANSBOXCOOR:
             img = screenCapRect(ansBox[1], ansBox[0], 30, 19)
             ansOfAnsBox = imageORC(img)
-            if parseInt(ansOfAnsBox) == ans:
+            try:
+                ansOfAnsBox = parseInt(ansOfAnsBox)
+            except:
+                ansOfAnsBox = 0
+            if ansOfAnsBox == ans:
                 mouseMove(820, 390, True)
                 time.sleep(1)
                 mouseMoveClick('l', ansBox[2][0], ansBox[2][1])
