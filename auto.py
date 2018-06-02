@@ -130,7 +130,7 @@ def solveAutoHunt():
         engString = engString.replace(' ', '')
         for c in engString:
             keyPress(c)
-            time.sleep(0.1)
+            time.sleep(0.4)
         keyPress('*')
         mouseMove(820, 390, True)
 
@@ -200,7 +200,7 @@ def checkIsBattle(img):
         if isBattle is not True:
             print('In battle')
             isBattle = True
-            time.sleep(2.3)
+            time.sleep(2)
             px, py = checkBattleStartingPos(screenCap(False))
             initBattle(px, py)
             print(datetime.datetime.now())
