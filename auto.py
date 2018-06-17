@@ -131,6 +131,7 @@ def solveAutoHunt():
         for c in engString:
             keyPress(c)
             time.sleep(0.4)
+        time.sleep(0.4)
         keyPress('*')
         mouseMove(820, 390, True)
 
@@ -200,7 +201,7 @@ def checkIsBattle(img):
         if isBattle is not True:
             print('In battle')
             isBattle = True
-            time.sleep(2)
+            time.sleep(1.9)
             px, py = checkBattleStartingPos(screenCap(False))
             initBattle(px, py)
             print(datetime.datetime.now())
@@ -218,7 +219,7 @@ def selectMonster(box, score):
         monsterY = int(minY + (maxY - minY) / 2)
         if (monsterX <= 975 and monsterY <= 750):
             mouseMoveClick('r', monsterX, monsterY)
-            nextSelectMonsterTime = datetime.datetime.now() + datetime.timedelta(seconds=4)
+            nextSelectMonsterTime = datetime.datetime.now() + datetime.timedelta(seconds=2)
 
 def set_interval(func, sec):
     def func_wrapper():

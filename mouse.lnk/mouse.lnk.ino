@@ -139,7 +139,9 @@ void loop()
         mouseMove(serialString, true);
       } else if (serialString.charAt(2) == 'l') {
         mouseMove(serialString, false);
+        delay(100);
         mouseClick(MOUSE_LEFT);
+        delay(100);
         mouseMove(serialString, true);
       } else if (serialString.charAt(2) == 'f') {
         mouseMove(serialString, false);
