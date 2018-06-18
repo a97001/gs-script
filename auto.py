@@ -117,7 +117,7 @@ def checkAutoHunt():
 
 def solveAutoHunt():
     time.sleep(1)
-    mouseMoveClick('l', 628, 428)
+    mouseMoveClick('l', 625, 420)
     time.sleep(1)
     screenCap(True)
     mouseMove(820, 390, False)
