@@ -91,11 +91,6 @@ python export_inference_graph \
               } \
             }"
 """
-import sys
-sys.path.append('C:\\Users\\comon\\Desktop\\git\\models\\research\\')
-sys.path.append('C:\\Users\\comon\\Desktop\\git\\models\\research\\slim')
-sys.path.append('C:\\Users\\comon\\Desktop\\git\\models\\research\\object_detection\\utils')
-
 import tensorflow as tf
 from google.protobuf import text_format
 from object_detection import exporter

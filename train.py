@@ -46,13 +46,9 @@ import json
 import os
 import tensorflow as tf
 
-import sys
-sys.path.append('C:\\Users\\comon\\Desktop\\git\\models\\research\\')
-sys.path.append('C:\\Users\\comon\\Desktop\\git\\models\\research\\slim')
-sys.path.append('C:\\Users\\comon\\Desktop\\git\\models\\research\\object_detection\\utils')
-
 from object_detection import trainer
 from object_detection.builders import dataset_builder
+from object_detection.builders import graph_rewriter_builder
 from object_detection.builders import model_builder
 from object_detection.utils import config_util
 from object_detection.utils import dataset_util
@@ -163,9 +159,25 @@ def main(_):
     is_chief = (task_info.type == 'master')
     master = server.target
 
-  trainer.train(create_input_dict_fn, model_fn, train_config, master, task,
-                FLAGS.num_clones, worker_replicas, FLAGS.clone_on_cpu, ps_tasks,
-                worker_job_name, is_chief, FLAGS.train_dir)
+  graph_rewriter_fn = None
+  if 'graph_rewriter_config' in configs:
+    graph_rewriter_fn = graph_rewriter_builder.build(
+        configs['graph_rewriter_config'], is_training=True)
+
+  trainer.train(
+      create_input_dict_fn,
+      model_fn,
+      train_config,
+      master,
+      task,
+      FLAGS.num_clones,
+      worker_replicas,
+      FLAGS.clone_on_cpu,
+      ps_tasks,
+      worker_job_name,
+      is_chief,
+      FLAGS.train_dir,
+      graph_hook_fn=graph_rewriter_fn)
 
 
 if __name__ == '__main__':

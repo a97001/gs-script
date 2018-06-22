@@ -28,7 +28,7 @@ def main():
     # image_path = os.path.join(os.getcwd(), 'annotations')
     image_path = 'C:\\Users\\comon\\Desktop\\gersang_screen_cap\\Imoogi'
     xml_df = xml_to_csv(image_path)
-    xml_df.to_csv('train\\monster_labels.csv', index=None)
+    xml_df.to_csv('data\\monster_labels.csv', index=None)
     print('Successfully converted xml to csv.')
 
 

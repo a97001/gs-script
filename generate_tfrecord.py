@@ -33,6 +33,8 @@ FLAGS = flags.FLAGS
 def class_text_to_int(row_label):
     if row_label == 'Imoogi':
         return 1
+    elif row_label == 'Ghost_J_Sparrow':
+        return 2
     else:
         None
 
@@ -87,11 +89,11 @@ def create_tf_example(group, path):
 def main(_):
     # path = os.path.join(os.getcwd(), 'images')
     path = 'C:\\Users\\comon\\Desktop\\gersang_screen_cap\\Imoogi'
-    examples = pd.read_csv(FLAGS.csv_input)
+    examples = pd.read_csv('data\\monster_labels.csv')
     examplesLen = len(examples)
     outputs = [
-        { 'filename': FLAGS.output_path_train, 'examples': examples[:int(examplesLen * 0.7)], 'dataLen': int(examplesLen * 0.7) },
-        { 'filename': FLAGS.output_path_test, 'examples': examples[int(examplesLen * 0.7):], 'dataLen': examplesLen - int(examplesLen * 0.7) }
+        { 'filename': 'data/train.record', 'examples': examples[:int(examplesLen * 0.7)], 'dataLen': int(examplesLen * 0.7) },
+        { 'filename': 'data/test.record', 'examples': examples[int(examplesLen * 0.7):], 'dataLen': examplesLen - int(examplesLen * 0.7) }
     ]
     
     for output in outputs:

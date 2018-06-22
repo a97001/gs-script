@@ -3,7 +3,7 @@ import tensorflow as tf
 
 class MonsterDetector(object):
     def __init__(self):
-        PATH_TO_MODEL = 'models/detect_monster/frozen_inference_graph.pb'
+        PATH_TO_MODEL = 'models/detect_monster_v2/training/frozen_inference_graph.pb'
         self.detection_graph = tf.Graph()
         with self.detection_graph.as_default():
             od_graph_def = tf.GraphDef()
