@@ -209,7 +209,7 @@ def checkIsBattle(img):
 def selectMonster(box, score):
     global nextSelectMonsterTime
     # print(score)
-    if (score > 0.65):
+    if (score > 0.5):
         minY = box[0] * 768
         minX = box[1] * 1024
         maxY = box[2] * 768
@@ -251,7 +251,7 @@ def main():
             solveAutoHunt()
         else:
             boxes, scores, classes, num = monsterDetector.get_classification(np.flip(img[:, :, :3], 2))
-            # print(scores[0][0], classes[0][0])
+            print(scores[0][0], classes[0][0])
             selectMonster(boxes[0][0], scores[0][0])
 
 initImg = screenCap(False)
