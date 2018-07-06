@@ -11,7 +11,7 @@ protoc object_detection/protos/*.proto --python_out=.
 python train.py --logtostderr --train_dir=models/detect_monster_v2/training --pipeline_config_path=models/detect_monster_v2/ssdlite_mobilenet_v2_coco.config
 
 ## Save and export trained model
-python export_inference_graph.py --input_type image_tensor --pipeline_config_path models/detect_monster_v2/ssdlite_mobilenet_v2_coco.config --trained_checkpoint_prefix models/detect_monster_v2/training/model.ckpt-1635 --output_directory models/detect_monster_v2/training
+python export_inference_graph.py --input_type image_tensor --pipeline_config_path models/detect_monster_v2/ssdlite_mobilenet_v2_coco.config --trained_checkpoint_prefix models/detect_monster_v2/training/model.ckpt-3166 --output_directory models/detect_monster_v2/training
 
 ## References
 https://becominghuman.ai/tensorflow-object-detection-api-tutorial-training-and-evaluating-custom-object-detector-ed2594afcf73

@@ -201,13 +201,12 @@ def checkIsBattle(img):
         if isBattle is not True:
             print('In battle')
             isBattle = True
-            time.sleep(1.9)
+            time.sleep(1.2)
             px, py = checkBattleStartingPos(screenCap(False))
             initBattle(px, py)
             print(datetime.datetime.now())
 
 def selectMonster(box, score):
-    global nextSelectMonsterTime
     # print(score)
     if (score > 0.5):
         minY = box[0] * 768
@@ -219,8 +218,9 @@ def selectMonster(box, score):
         monsterY = int(minY + (maxY - minY) / 2)
         if (monsterX <= 975 and monsterY <= 750):
             mouseMoveClick('r', monsterX, monsterY)
-            # nextSelectMonsterTime = datetime.datetime.now() + datetime.timedelta(seconds=2)
             time.sleep(1)
+            if checkAutoHunt():
+                solveAutoHunt()
 
 def set_interval(func, sec):
     def func_wrapper():
@@ -241,24 +241,8 @@ def main():
     # print(img[5][988])
     # print(img[31][979])
     checkIsBattle(img)
-    # if isBattle == False and nextSelectMonsterTime < datetime.datetime.now():
-    # if isBattle == False and nextSelectMonsterTime < datetime.datetime.now():
-        # if pauseTimeEnd < datetime.datetime.now():
-        #     pauseTime = datetime.datetime.now() + datetime.timedelta(seconds=45*60)
-        #     pauseTimeEnd = datetime.datetime.now() + datetime.timedelta(seconds=60*60)
-        # if pauseTime < datetime.datetime.now() and pauseTimeEnd > datetime.datetime.now():
-        #     return 0
-    if checkAutoHunt():
-        solveAutoHunt()
-    else:
-        data = np.copy(img)
-        image = Image.fromarray(data)
-        width = 640
-        ratio = float(width)/image.size[0]
-        height = int(image.size[1]*ratio)
-        image = image.resize( (width, height), Image.BILINEAR)
-        image = np.array(image, dtype=np.uint8)
-        boxes, scores, classes, num = monsterDetector.get_classification(np.flip(image[:, :, :3], 2))
+    if isBattle == False:
+        boxes, scores, classes, num = monsterDetector.get_classification(np.flip(img[:, :, :3], 2))
         # print(scores[0][0], classes[0][0])
         selectMonster(boxes[0][0], scores[0][0])
 
