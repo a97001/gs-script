@@ -1,3 +1,4 @@
+from argparse import ArgumentParser
 from PIL import Image
 import datetime
 import numpy as np
@@ -9,6 +10,10 @@ import threading
 import time
 
 from MonsterDetector import MonsterDetector
+
+parser = ArgumentParser()
+parser.add_argument("-p", "--player", help="multi-player mode", dest="playerSum", default='1', type=int)
+args = parser.parse_args()
 
 global monsterDetector, screenTop, screenLeft, mapIconColor, battleColor, mouseRatio, usb, isBattle, nextSelectMonsterTime, pauseTime, pauseTimeEnd
 screenTop = 227
@@ -184,8 +189,16 @@ def checkStamina(img):
     x = 610 - int(1024 / 2)
     y = 390 - int(768 / 2)
     if img[669][190][0] != 66 or img[669][190][1] != 211 or img[669][190][2] != 165 or img[676][190][0] != 66 or img[676][190][1] != 211 or img[676][190][2] != 165:
-        usb.write(("s:s:"+str(x)+":"+str(y)+"\n").encode('utf-8'))
-        time.sleep(0.7)
+        usb.write(("s:1:"+str(x)+":"+str(y)+"\n").encode('utf-8'))
+        time.sleep(0.5)
+    if (args.playerSum == 2):
+        usb.write(("p:p").encode('utf-8'))
+        time.sleep(0.2)
+        if img[669][190][0] != 66 or img[669][190][1] != 211 or img[669][190][2] != 165 or img[676][190][0] != 66 or img[676][190][1] != 211 or img[676][190][2] != 165:
+            usb.write(("s:2:"+str(x)+":"+str(y)+"\n").encode('utf-8'))
+            time.sleep(0.5)
+        usb.write(("p:p").encode('utf-8'))
+
 
 def checkIsBattle(img):
     global isBattle, mapIconColor

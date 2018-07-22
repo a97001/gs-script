@@ -68,6 +68,13 @@ void keyPress(char key)
   Keyboard.releaseAll();
 }
 
+void switchWindow()
+{
+  Keyboard.press(KEY_LEFT_ALT);
+  Keyboard.press(KEY_TAB);
+  Keyboard.releaseAll();
+}
+
 void initBattle(String serialString)
 {
   mouseMove(serialString, false);
@@ -78,7 +85,7 @@ void initBattle(String serialString)
   delay(100);
   mouseClick(MOUSE_LEFT);
   delay(500);
-  keyPress('6');
+  keyPress('8');
   delay(100);
   keyPress('g');
   delay(100);
@@ -88,6 +95,12 @@ void initBattle(String serialString)
   delay(100);
   mouseClick(MOUSE_RIGHT);
   delay(500);
+//  keyPress('6');
+//  delay(100);
+//  keyPress('c');
+//  delay(100);
+//  mouseClick(MOUSE_LEFT);
+//  delay(250);
   keyPress('4');
   delay(100);
   keyPress('r');
@@ -105,24 +118,24 @@ void initBattle(String serialString)
 
 void eatFood(String serialString)
 {
-  delay(100);
+  delay(50);
   keyPress('f');
-  delay(100);
-  keyPress('5');
-  delay(100);
+  delay(50);
+  keyPress(serialString.charAt(2));
+  delay(50);
   keyPress('i');
   mouseMove(serialString, false);
   delay(100);
   mouseClick(MOUSE_RIGHT);
-  delay(100);
+  delay(50);
   mouseClick(MOUSE_RIGHT);
-  delay(100);
+  delay(50);
   mouseClick(MOUSE_RIGHT);
-  delay(100);
+  delay(50);
   mouseMove(serialString, true);
-  delay(100);
+  delay(50);
   keyPress('i');
-  delay(100);
+  delay(50);
   keyPress('f');
 }
 
@@ -154,6 +167,8 @@ void loop()
       initBattle(serialString);
     } else if (serialString.charAt(0) == 's') {
       eatFood(serialString);
+    } else if (serialString.charAt(0) == 'p') {
+      switchWindow();
     }
   }
 }
