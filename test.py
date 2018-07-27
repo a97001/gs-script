@@ -11,9 +11,40 @@ tessdata_dir_config = '--tessdata-dir "C:\\Program Files (x86)\\Tesseract-OCR\\t
 
 # from MonsterDetector import MonsterDetector
 
-# screenTop = 227
-# screenLeft = 448
+screenTop = 227
+screenLeft = 448
 
+def screenCapRect(top, left, width, height):
+    global screenTop, screenLeft
+    with mss.mss() as sct:
+        # The screen part to capture
+        monitor = {'top': screenTop+top, 'left': screenLeft+left, 'width': width, 'height': height}
+
+        # Grab the data
+        return np.array(sct.grab(monitor), dtype=np.uint8)
+
+def imageORC(img):
+    tessdata_dir_config = '--tessdata-dir "C:\\Program Files (x86)\\Tesseract-OCR\\tessdata" -l eng --psm 6 --oem 0'
+    data = np.copy(img)
+    for y in range(len(data)):
+        for x in range(len(data[y])):
+            # if data[y][x][0] != 255:
+            #     data[y][x][0] = 0
+            if data[y][x][1] != 251:
+                data[y][x][1] = 0
+            # if data[y][x][2] != 255:
+            #     data[y][x][2] = 0
+
+    image = Image.fromarray(data)
+    width = 1000
+    ratio = float(width)/image.size[0]
+    height = int(image.size[1]*ratio)
+    image = image.resize( (width, height), Image.BILINEAR)
+    try:
+        s = pytesseract.image_to_string(image, config=tessdata_dir_config)
+        return s
+    except:
+        return ''
 
 # with mss.mss() as sct:
 #     # The screen part to capture
@@ -30,23 +61,24 @@ tessdata_dir_config = '--tessdata-dir "C:\\Program Files (x86)\\Tesseract-OCR\\t
 #     # print(img[36][1004])
 #     # print(img[5][988])
 #     # print(img[31][979])
-image = Image.open('C:\\Users\\comon\\Desktop\\gs\\testrec.jpg')
-image = image.convert('RGB')
-data = np.array(image)
-for y in range(len(data)):
-    for x in range(len(data[y])):
-        # if data[y][x][0] != 255:
-        #     data[y][x][0] = 0
-        if data[y][x][1] != 251:
-            data[y][x][1] = 0
-        # if data[y][x][2] != 255:
-        #     data[y][x][2] = 0
 
-image = Image.fromarray(data)
-width = 1000
-ratio = float(width)/image.size[0]
-height = int(image.size[1]*ratio)
-image = image.resize( (width, height), Image.BILINEAR  )
+# image = Image.open('C:\\Users\\comon\\Desktop\\gs\\testrec.jpg')
+# image = image.convert('RGB')
+# data = np.array(image)
+# for y in range(len(data)):
+#     for x in range(len(data[y])):
+#         # if data[y][x][0] != 255:
+#         #     data[y][x][0] = 0
+#         if data[y][x][1] != 251:
+#             data[y][x][1] = 0
+#         # if data[y][x][2] != 255:
+#         #     data[y][x][2] = 0
+
+# image = Image.fromarray(data)
+# width = 1000
+# ratio = float(width)/image.size[0]
+# height = int(image.size[1]*ratio)
+# image = image.resize( (width, height), Image.BILINEAR  )
 
 # image = image.filter(ImageFilter.FIND_EDGES)
 
@@ -54,8 +86,12 @@ image = image.resize( (width, height), Image.BILINEAR  )
  
 # image = ImageEnhance.Color(image).enhance(0)
 # image = ImageEnhance.Sharpness(image).enhance(3)    
-image.show()
+# image.show()
 
-s = pytesseract.image_to_string(image, config=tessdata_dir_config)
-print(s)
+# s = pytesseract.image_to_string(image, config=tessdata_dir_config)
+# print(s)
 # print(eval(s.replace('x', '*')))
+
+img = screenCapRect(719, 45, 77, 14)
+s = imageORC(img)
+print(int(s.replace(' ', '').replace(',', '')))

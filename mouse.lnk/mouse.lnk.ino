@@ -127,13 +127,9 @@ void eatFood(String serialString)
   mouseMove(serialString, false);
   delay(100);
   mouseClick(MOUSE_RIGHT);
-  delay(50);
-  mouseClick(MOUSE_RIGHT);
-  delay(50);
-  mouseClick(MOUSE_RIGHT);
-  delay(50);
+  delay(100);
   mouseMove(serialString, true);
-  delay(50);
+  delay(100);
   keyPress('i');
   delay(50);
   keyPress('f');

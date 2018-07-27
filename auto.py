@@ -162,7 +162,6 @@ def solveAutoHunt():
         mouseMove(820, 390, True)
     time.sleep(1)
 
-
 def checkBattleStartingPos(img):
     global leftPixel, rightPixel, topPixel, bottomPixel, leftMiddlePixel, rightMiddlePixel, battleColor
     if img[leftPixel[1]][leftPixel[0]][0] == battleColor and img[leftPixel[1]][leftPixel[0]][1] == 0 and img[leftPixel[1]][leftPixel[0]][2] == 0:
@@ -199,6 +198,20 @@ def checkStamina(img):
             time.sleep(0.5)
         usb.write(("p:p").encode('utf-8'))
 
+def checkDeath():
+    x = 610 - int(1024 / 2)
+    y = 390 - int(768 / 2)
+    img = screenCapRect(719, 45, 77, 14)
+    attackValue = imageORC(img).replace(' ', '').replace(',', '')
+    try:
+        attackValue = int(attackValue)
+    except:
+        return False
+    if attackValue < 920000:
+        print('------------Some people dead--------------')
+        usb.write(("s:7:"+str(x)+":"+str(y)+"\n").encode('utf-8'))
+        time.sleep(0.5)
+    return False
 
 def checkIsBattle(img):
     global isBattle, mapIconColor
@@ -209,6 +222,7 @@ def checkIsBattle(img):
             print('Not in battle')
             isBattle = False
             checkStamina(img)
+            checkDeath()
 
     else:
         if isBattle is not True:
