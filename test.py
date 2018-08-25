@@ -24,7 +24,7 @@ def screenCapRect(top, left, width, height):
         return np.array(sct.grab(monitor), dtype=np.uint8)
 
 def imageORC(img):
-    tessdata_dir_config = '--tessdata-dir "C:\\Program Files (x86)\\Tesseract-OCR\\tessdata" -l eng --psm 6 --oem 0'
+    tessdata_dir_config = '--tessdata-dir "C:\\Program Files (x86)\\Tesseract-OCR\\tessdata" -l eng --psm 6 --oem 0 -c load_system_dawg=0 -c load_freq_dawg=0'
     data = np.copy(img)
     for y in range(len(data)):
         for x in range(len(data[y])):
@@ -92,6 +92,6 @@ def imageORC(img):
 # print(s)
 # print(eval(s.replace('x', '*')))
 
-img = screenCapRect(719, 45, 77, 14)
+img = screenCapRect(350, 418, 188, 58)
 s = imageORC(img)
-print(int(s.replace(' ', '').replace(',', '')))
+print(s)

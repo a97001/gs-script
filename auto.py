@@ -90,7 +90,7 @@ def screenCapRect(top, left, width, height):
         return np.array(sct.grab(monitor), dtype=np.uint8)
 
 def imageORC(img):
-    tessdata_dir_config = '--tessdata-dir "C:\\Program Files (x86)\\Tesseract-OCR\\tessdata" -l eng --psm 6 --oem 0'
+    tessdata_dir_config = '--tessdata-dir "C:\\Program Files (x86)\\Tesseract-OCR\\tessdata" -l eng --psm 6 --oem 0 -c load_system_dawg=0 -c load_freq_dawg=0'
     data = np.copy(img)
     for y in range(len(data)):
         for x in range(len(data[y])):
@@ -115,7 +115,7 @@ def imageORC(img):
 def checkAutoHunt():
     img = screenCapRect(324, 436, 167, 74)
     isAutoHuntReport = imageORC(img)
-    if 'report has been' in isAutoHuntReport:
+    if 'report has been' in isAutoHuntReport or 'was incorrect' in isAutoHuntReport:
         print('------------In auto hunt report--------------')
         return True
     return False
@@ -161,6 +161,8 @@ def solveAutoHunt():
     else:
         mouseMove(820, 390, True)
     time.sleep(1)
+    if checkAutoHunt() == True:
+        solveAutoHunt()
 
 def checkBattleStartingPos(img):
     global leftPixel, rightPixel, topPixel, bottomPixel, leftMiddlePixel, rightMiddlePixel, battleColor
@@ -207,7 +209,7 @@ def checkDeath():
         attackValue = int(attackValue)
     except:
         return False
-    if attackValue < 920000:
+    if attackValue < 1200000:
         print('------------Some people dead--------------')
         usb.write(("s:7:"+str(x)+":"+str(y)+"\n").encode('utf-8'))
         time.sleep(0.5)
@@ -245,7 +247,7 @@ def selectMonster(box, score):
         monsterY = int(minY + (maxY - minY) / 2)
         if (monsterX <= 975 and monsterY <= 750):
             mouseMoveClick('r', monsterX, monsterY)
-            time.sleep(1)
+            time.sleep(1.2)
             if checkAutoHunt():
                 solveAutoHunt()
 
