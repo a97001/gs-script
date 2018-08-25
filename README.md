@@ -7,6 +7,19 @@ set PYTHONPATH=<PATH_TO_MODELS>;<PATH_TO_MODELS>\slim
 protobuf-compiler above v3.3.0 required
 protoc object_detection/protos/*.proto --python_out=.
 
+## Generate xml image detail to csv
+python xml_to_csv.py
+
+## Generate tfRecord
+add new category in class_text_to_int function
+python generate_tfrecord.py
+
+## Update object-detection.pbtxt
+add new category
+
+## Update ssdlite_mobilenet_v2_coco.config
+update num_classes
+
 ## start model training
 python train.py --logtostderr --train_dir=models/detect_monster_v2/training --pipeline_config_path=models/detect_monster_v2/ssdlite_mobilenet_v2_coco.config
 

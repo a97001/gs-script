@@ -7,3 +7,8 @@ item {
   id: 2
   name: 'Ghost_J_Sparrow'
 }
+
+item {
+  id: 3
+  name: 'Contaminated_Sword_Ghost'
+}

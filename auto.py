@@ -211,7 +211,7 @@ def checkDeath():
         return False
     if attackValue < 1200000:
         print('------------Some people dead--------------')
-        usb.write(("s:7:"+str(x)+":"+str(y)+"\n").encode('utf-8'))
+        usb.write(("s:4:"+str(x)+":"+str(y)+"\n").encode('utf-8'))
         time.sleep(0.5)
     return False
 
