@@ -36,7 +36,7 @@ monsterDetector = MonsterDetector()
 nextSelectMonsterTime = datetime.datetime.now()
 usb = serial.Serial()
 usb.baudrate = 9600
-usb.port = "COM7"
+usb.port = "COM3"
 usb.open()
 
 def parseInt(string):
@@ -90,7 +90,7 @@ def screenCapRect(top, left, width, height):
         return np.array(sct.grab(monitor), dtype=np.uint8)
 
 def imageORC(img):
-    tessdata_dir_config = '--tessdata-dir "C:\\Program Files (x86)\\Tesseract-OCR\\tessdata" -l eng --psm 6 --oem 0 -c load_system_dawg=0 -c load_freq_dawg=0'
+    tessdata_dir_config = '--tessdata-dir "C:\\Program Files\\Tesseract-OCR\\tessdata" -l eng --psm 6 --oem 3 -c load_system_dawg=0 -c load_freq_dawg=0'
     data = np.copy(img)
     for y in range(len(data)):
         for x in range(len(data[y])):
@@ -204,7 +204,7 @@ def checkDeath():
     x = 610 - int(1024 / 2)
     y = 390 - int(768 / 2)
     img = screenCapRect(719, 45, 77, 14)
-    attackValue = imageORC(img).replace(' ', '').replace(',', '')
+    attackValue = imageORC(img).replace(' ', '').replace(',', '').replace('.', '').replace('s', '5')
     try:
         attackValue = int(attackValue)
     except:
@@ -219,7 +219,7 @@ def checkIsBattle(img):
     global isBattle, mapIconColor
     orc = screenCapRect(708, 837, 55, 17)
     checkedWord = imageORC(orc)
-    if 'Battle' in checkedWord or 'Peace' in checkedWord:
+    if 'Battle' in checkedWord or 'Peace' in checkedWord or 'Psace' in checkedWord:
         if isBattle is not False:
             print('Not in battle')
             isBattle = False
