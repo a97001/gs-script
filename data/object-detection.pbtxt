@@ -12,3 +12,8 @@ item {
   id: 3
   name: 'Contaminated_Sword_Ghost'
 }
+
+item {
+  id: 4
+  name: 'Mad_Tiger'
+}

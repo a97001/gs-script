@@ -209,7 +209,7 @@ def checkDeath():
         attackValue = int(attackValue)
     except:
         return False
-    if attackValue < 1200000:
+    if attackValue < 1410000:
         print('------------Some people dead--------------')
         usb.write(("s:4:"+str(x)+":"+str(y)+"\n").encode('utf-8'))
         time.sleep(0.5)
@@ -230,7 +230,7 @@ def checkIsBattle(img):
         if isBattle is not True:
             print('In battle')
             isBattle = True
-            time.sleep(1.2)
+            time.sleep(0.5)
             px, py = checkBattleStartingPos(screenCap(False))
             initBattle(px, py)
             print(datetime.datetime.now())

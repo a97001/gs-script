@@ -36,7 +36,9 @@ def class_text_to_int(row_label):
     elif row_label == 'Ghost_J_Sparrow':
         return 2
     elif row_label == 'Contaminated_Sword_Ghost':
-        return 2
+        return 3
+    elif row_label == 'Mad_Tiger':
+        return 4
     else:
         None
 
