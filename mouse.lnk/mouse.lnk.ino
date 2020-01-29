@@ -98,7 +98,24 @@ void initBattle(String serialString)
   //  keyPress('7');
   //  delay(100);
   //  mouseClick(MOUSE_RIGHT);
+  // --------------------------------- decrease monster defense
   delay(500);
+  keyPress('4');
+  delay(100);
+  keyPress('r');
+  delay(100);
+  mouseClick(MOUSE_LEFT);
+  delay(1000);
+  keyPress('3');
+  delay(100);
+  keyPress('r');
+  delay(100);
+  mouseClick(MOUSE_LEFT);
+  delay(500);
+  keyPress('0');
+  delay(100);
+  keyPress('h');
+  delay(3000);
   keyPress('4');
   delay(100);
   keyPress('r');
