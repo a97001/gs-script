@@ -230,7 +230,7 @@ def checkDeath():
     try:
         attackValue = int(attackValueStr)
     except:
-        return False
+        attackValue = 99999999999
     attackValueThershold = 1410000
     print("\tAttack Value: %d, Thershold: %d, String: %s" % (attackValue, attackValueThershold, attackValueStr))
     if attackValue < attackValueThershold:
