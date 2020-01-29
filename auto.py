@@ -8,6 +8,7 @@ import random
 import serial
 import threading
 import time
+import win32gui
 
 from MonsterDetector import MonsterDetector
 
@@ -18,6 +19,27 @@ args = parser.parse_args()
 global monsterDetector, screenTop, screenLeft, mapIconColor, battleColor, mouseRatio, usb, isBattle, nextSelectMonsterTime, pauseTime, pauseTimeEnd
 screenTop = 227
 screenLeft = 448
+
+def callback(hwnd, windowSize):
+    rect = win32gui.GetWindowRect(hwnd)
+    x = rect[0]
+    y = rect[1]
+    w = rect[2] - x
+    h = rect[3] - y
+    if (win32gui.GetWindowText(hwnd) == 'Gersang'):
+        print("Window %s:" % win32gui.GetWindowText(hwnd))
+        print("\tLocation: (%d, %d)" % (x, y))
+        print("\t    Size: (%d, %d)" % (w, h))
+        windowSize.append(y + 26)
+        windowSize.append(x + 3)
+
+windowSize = []
+win32gui.EnumWindows(callback, windowSize)
+if (len(windowSize) > 0):
+    screenTop = windowSize[0]
+    screenLeft = windowSize[1]
+print("\t    Actual Pos: (%d, %d)" % (screenLeft, screenTop))
+
 isBattle = False
 battleColor = 148
 mouseRatio = 1
@@ -204,12 +226,14 @@ def checkDeath():
     x = 610 - int(1024 / 2)
     y = 390 - int(768 / 2)
     img = screenCapRect(719, 45, 77, 14)
-    attackValue = imageORC(img).replace(' ', '').replace(',', '').replace('.', '').replace('s', '5')
+    attackValueStr = imageORC(img).replace(' ', '').replace(',', '').replace('.', '').replace('s', '5')
     try:
-        attackValue = int(attackValue)
+        attackValue = int(attackValueStr)
     except:
         return False
-    if attackValue < 1410000:
+    attackValueThershold = 1410000
+    print("\tAttack Value: %d, Thershold: %d, String: %s" % (attackValue, attackValueThershold, attackValueStr))
+    if attackValue < attackValueThershold:
         print('------------Some people dead--------------')
         usb.write(("s:4:"+str(x)+":"+str(y)+"\n").encode('utf-8'))
         time.sleep(0.5)
@@ -221,19 +245,21 @@ def checkIsBattle(img):
     checkedWord = imageORC(orc)
     if 'Battle' in checkedWord or 'Peace' in checkedWord or 'Psace' in checkedWord:
         if isBattle is not False:
-            print('Not in battle')
+            print("\tBattle End At: %s, String: %s" % (datetime.datetime.now().strftime("%y-%m-%d %H:%M:%S"), checkedWord))
             isBattle = False
             checkStamina(img)
             checkDeath()
 
     else:
         if isBattle is not True:
-            print('In battle')
+            # print('In battle')
             isBattle = True
             time.sleep(0.5)
             px, py = checkBattleStartingPos(screenCap(False))
             initBattle(px, py)
-            print(datetime.datetime.now())
+            print("-----------------------------------------------------------------")
+            print("\tBattle Start At: %s" % (datetime.datetime.now().strftime("%y-%m-%d %H:%M:%S")))
+        time.sleep(0.1)
 
 def selectMonster(box, score):
     # print(score)

@@ -84,6 +84,10 @@ void initBattle(String serialString)
   keyPress('g');
   delay(100);
   mouseClick(MOUSE_LEFT);
+  delay(100);
+  keyPress('0');
+  delay(100);
+  keyPress('h');
   // delay(500);
   // keyPress('6');
   // delay(100);

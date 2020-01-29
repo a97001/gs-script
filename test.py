@@ -6,14 +6,34 @@ import pytesseract
 import serial
 import threading
 import time
+import win32gui
 
 # pytesseract.pytesseract.tesseract_cmd = 'C:\\Program Files\\Tesseract-OCR\\tesseract.exe'
 tessdata_dir_config = '--tessdata-dir "C:\\Program Files\\Tesseract-OCR\\tessdata" -l eng --psm 6 --oem 3'
 
-# from MonsterDetector import MonsterDetector
-
 screenTop = 227
 screenLeft = 448
+
+# from MonsterDetector import MonsterDetector
+def callback(hwnd, windowSize):
+    rect = win32gui.GetWindowRect(hwnd)
+    x = rect[0]
+    y = rect[1]
+    w = rect[2] - x
+    h = rect[3] - y
+    if (win32gui.GetWindowText(hwnd) == 'Gersang'):
+        print("Window %s:" % win32gui.GetWindowText(hwnd))
+        print("\tLocation: (%d, %d)" % (x, y))
+        print("\t    Size: (%d, %d)" % (w, h))
+        windowSize.append(y + 26)
+        windowSize.append(x + 3)
+
+windowSize = []
+win32gui.EnumWindows(callback, windowSize)
+if (len(windowSize) > 0):
+    screenTop = windowSize[0]
+    screenLeft = windowSize[1]
+print("\t    Actual Pos: (%d, %d)" % (screenLeft, screenTop))
 
 def screenCapRect(top, left, width, height):
     global screenTop, screenLeft
@@ -93,8 +113,9 @@ def imageORC(img):
 # print(s)
 # print(eval(s.replace('x', '*')))
 
-img = screenCapRect(719, 45, 77, 14)
+img = screenCapRect(708, 837, 55, 17)
 # image = Image.fromarray(img)
 # image.show()
 s = imageORC(img)
 print(s)
+print('-------end-------')
