@@ -226,7 +226,7 @@ def checkDeath():
     x = 610 - int(1024 / 2)
     y = 390 - int(768 / 2)
     img = screenCapRect(719, 45, 77, 14)
-    attackValueStr = imageORC(img).replace(' ', '').replace(',', '').replace('.', '').replace('s', '5')
+    attackValueStr = imageORC(img).replace(' ', '').replace(',', '').replace('.', '').replace('s', '5').replace('S', '5').replace('/', '1')
     try:
         attackValue = int(attackValueStr)
     except:
@@ -254,7 +254,7 @@ def checkIsBattle(img):
         if isBattle is not True:
             # print('In battle')
             isBattle = True
-            time.sleep(0.5)
+            # time.sleep(0.5)
             px, py = checkBattleStartingPos(screenCap(False))
             initBattle(px, py)
             print("-----------------------------------------------------------------")
@@ -273,7 +273,7 @@ def selectMonster(box, score):
         monsterY = int(minY + (maxY - minY) / 2)
         if (monsterX <= 975 and monsterY <= 750):
             mouseMoveClick('r', monsterX, monsterY)
-            time.sleep(1.2)
+            time.sleep(1)
             if checkAutoHunt():
                 solveAutoHunt()
 
